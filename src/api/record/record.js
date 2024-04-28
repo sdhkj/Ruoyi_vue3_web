@@ -1,5 +1,16 @@
 import request from '@/utils/request'
 
+// 审核通过
+export function updateStatusAllow(data){
+  return request({
+    url: '/system/record/updateAllowStatus',
+    method: 'put',
+    data: data
+  })
+}
+
+
+// 审核不通过
 export function updateVerifyStatusNotAllow(data){
   return request({
     url: '/system/record/updateStatus',
