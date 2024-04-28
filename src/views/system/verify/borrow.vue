@@ -81,7 +81,7 @@
         <template #default="scope">
 <!--          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:verify:edit']">修改</el-button>-->
 <!--          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:verify:remove']">删除</el-button>-->
-          <el-button link type="primary" icon="Edit" @click="(scope.row)" v-hasPermi="['verify:allow']">审核通过</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleAllow(scope.row)" v-hasPermi="['verify:allow']">审核通过</el-button>
           <el-button link type="primary" icon="Edit" @click="handleNotallow(scope.row)" v-hasPermi="['verify:notallow']">审核不通过</el-button>
         </template>
       </el-table-column>
@@ -110,7 +110,17 @@
 </template>
 
 <script setup name="Record">
-import { listRecord, getRecord, delRecord, addRecord, updateRecord ,updateVerifyStatusNotAllow} from "@/api/record/record";
+// 引入api
+import {
+  listRecord,
+  getRecord,
+  delRecord,
+  addRecord,
+  updateRecord,
+  updateVerifyStatusNotAllow,
+  updateStatusAllow,
+
+} from "@/api/record/record";
 
 const { proxy } = getCurrentInstance();
 
@@ -266,12 +276,38 @@ function handleNotallow(row){
         }
 
 
-      }).catch(() => {
-        proxy.$modal.msgSuccess("点击取消");
       })
+  }).catch(() => {
+    proxy.$modal.msgSuccess("点击取消");
   })
+}
 
 
+
+/** 审核通过
+ * 将所在行的数据的审核状态改为1审核通过,归还状态改为0未归还
+ * 同时将设备表中剩余数量减1*/
+function handleAllow(row){
+  proxy.$modal.confirm('是否确认 “审核通过” ？').then(async function() {
+    const data = {
+      id:row.id,
+
+    }
+
+    await updateStatusAllow(data).then(response => {
+
+      if (response.code === 200) {
+        proxy.$modal.msgSuccess("审核通过");
+        getList();
+      } else {
+        proxy.$modal.msgError(response.msg);
+      }
+
+
+    })
+  }).catch(() => {
+    proxy.$modal.msgSuccess("点击取消");
+  })
 }
 
 getList();
