@@ -72,3 +72,26 @@ export function getMyBorrowList(query) {
     params: query
   })
 }
+
+
+//-------------------------------------------归还设备api
+// 查询当前登录用户归还设备列表
+export function getMyReturnList(query) {
+  return request({
+    url: '/system/record/myborrowlist',
+    method: 'get',
+    params: query
+  })
+}
+
+
+
+
+//----------------------------------------归还审核列表
+export function listReturnRecord(query) {
+  return request({
+    url: '/system/record/listReturnRecord',
+    method: 'get',
+    params: query
+  })
+}
