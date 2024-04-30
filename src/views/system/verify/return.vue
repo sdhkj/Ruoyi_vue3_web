@@ -76,10 +76,17 @@
         </template>
       </el-table-column>
       <!--   规划状态 0未归还,1已归还  -->
-      <el-table-column label="归还状态" align="center" prop="ruturnStatus" />
+<!--      <el-table-column label="归还状态" align="center" prop="ruturnStatus" />-->
+      <el-table-column label="归还状态" align="center" >
+        <template #default="scope">
+          <span v-if="scope.row.ruturnStatus === '1'">审核中</span>
+          <span v-else-if="scope.row.ruturnStatus === '2'">已归还</span>
+          <span v-else-if="scope.row.ruturnStatus === '0'">未归还</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-                    <el-button link type="primary" icon="Edit" @click="handleConfirmReturn(scope.row)" v-hasPermi="['confirm:return:status']">确认归还</el-button>
+          <el-button plain type="primary" @click="handleConfirmReturn(scope.row)" v-hasPermi="['confirm:return:status']">确认归还</el-button>
 
 
         </template>
@@ -117,6 +124,7 @@ import {
   addRecord,
   updateRecord,
   listReturnRecord,
+  confirmReturn,
 
 } from "@/api/record/record";
 
@@ -139,7 +147,7 @@ const data = reactive({
     pageSize: 10,
     userId: null,
     createTime: null,
-    verifyStatus: null,
+    verifyStatus: "1",
   },
   rules: {
   }
@@ -250,6 +258,23 @@ function handleExport() {
   proxy.download('system/record/export', {
     ...queryParams.value
   }, `record_${new Date().getTime()}.xlsx`)
+}
+
+/** 管理员确认归还 */
+function handleConfirmReturn(row){
+  proxy.$modal.confirm('是否确认归还"' + row.deviceName + '"？').then(async function() {
+    await confirmReturn(row.id).then(response => {
+      if (response.code === 200) {
+        proxy.$modal.msgSuccess("已归还");
+        getList();
+      } else {
+        proxy.$modal.msgError(response.msg);
+      }
+    })
+
+  }).catch(() => {
+    proxy.$modal.msgSuccess("取消");
+  });
 }
 
 

@@ -78,12 +78,19 @@
         </template>
       </el-table-column>
       <!--      0审核中，1通过，2未通过-->
-      <el-table-column label="归还状态" align="center" prop="ruturnStatus" />
+<!--      <el-table-column label="归还状态" align="center" prop="ruturnStatus" />-->
+      <el-table-column label="归还状态" align="center" >
+        <template #default="scope">
+          <span v-if="scope.row.ruturnStatus === '1'">审核中</span>
+          <span v-else-if="scope.row.ruturnStatus === '2'">已归还</span>
+          <span v-else-if="scope.row.ruturnStatus === '0'">未归还</span>
+        </template>
+      </el-table-column>
             <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
               <template #default="scope">
                 <!--          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:verify:edit']">修改</el-button>-->
                 <!--          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:verify:remove']">删除</el-button>-->
-                <el-button link type="primary" icon="Edit" @click="(scope.row)" v-hasPermi="['common:return']">归还</el-button>
+                <el-button plain type="primary" @click="handleReturnDevice(scope.row)" v-hasPermi="['common:return']">归还</el-button>
 
               </template>
             </el-table-column>
@@ -112,9 +119,10 @@
 </template>
 
 <script setup name="Record">
-import { listRecord, getRecord, delRecord, addRecord, updateRecord ,getMyReturnList} from "@/api/record/record";
+import { listRecord, getRecord, delRecord, addRecord, updateRecord ,getMyReturnList,returnDevice} from "@/api/record/record";
 
 import useUserStore from '@/store/modules/user'
+import {addBorrowRecord} from "@/api/detail/detail.js";
 
 const { proxy } = getCurrentInstance();
 
@@ -253,4 +261,30 @@ function handleExport() {
 }
 
 getList();
+
+/** 学生点击归还按钮操作 */
+function handleReturnDevice(row){
+  proxy.$modal.confirm('是否确认归还"' + row.deviceName + '"？').then(async function() {
+    await returnDevice(row.id).then(response => {
+      if (response.code === 200) {
+        proxy.$modal.msgSuccess("请求已提交，审核中");
+        getList();
+      } else {
+        proxy.$modal.msgError(response.msg);
+      }
+    })
+
+  }).catch(() => {
+    proxy.$modal.msgSuccess("取消归还");
+  });
+
+
+
+
+
+
+
+}
+
+
 </script>

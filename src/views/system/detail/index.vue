@@ -76,7 +76,8 @@
         <template #default="scope">
 <!--          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['detail:detail:edit']">修改</el-button>-->
 <!--          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['detail:detail:remove']">删除</el-button>-->
-          <el-button link type="primary" icon="Edit" @click="handleBorrow(scope.row)" v-hasPermi="['common:device:borrow']">借用</el-button>
+          <el-button plain type="primary"  @click="handleBorrow(scope.row)" v-hasPermi="['common:device:borrow']">借用</el-button>
+
         </template>
       </el-table-column>
     </el-table>

@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-const url = ref('https://gitee.com/y_project/RuoYi-Vue');
+const url = ref('https://github.com/sdhkj/Ruoyi_vue3_web/tree/main');
 
 function goto() {
   window.open(url.value)

@@ -78,7 +78,22 @@
         </template>
       </el-table-column>
       <!--      0审核中，1通过，2未通过-->
-      <el-table-column label="审核状态" align="center" prop="verifyStatus" />
+<!--      <el-table-column label="审核状态" align="center" prop="verifyStatus" />-->
+
+<!--      prop="id"：告诉el-table-column直接显示recordList数组中每一项的id属性。-->
+<!--      scope.row：在template的#default插槽中，scope是一个对象，包含当前行的数据，row属性就是当前行的完整数据对象。-->
+<!--      scope.row.verifyStatus：访问当前行的verifyStatus属性，并根据其值决定显示哪个状态文本。-->
+      <el-table-column label="审核状态" align="center" >
+        <template #default="scope">
+          <span v-if="scope.row.verifyStatus === '1'">审核通过</span>
+          <span v-else-if="scope.row.verifyStatus === '2'">审核不通过</span>
+          <span v-else-if="scope.row.verifyStatus === '0'">审核中</span>
+        </template>
+      </el-table-column>
+
+
+
+
 <!--      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">-->
 <!--        <template #default="scope">-->
 <!--          &lt;!&ndash;          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:verify:edit']">修改</el-button>&ndash;&gt;-->

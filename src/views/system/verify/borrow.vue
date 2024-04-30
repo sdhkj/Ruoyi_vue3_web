@@ -76,13 +76,21 @@
         </template>
       </el-table-column>
 <!--      0审核中，1通过，2未通过-->
-      <el-table-column label="审核状态" align="center" prop="verifyStatus" />
+<!--      <el-table-column label="审核状态" align="center" prop="verifyStatus" />-->
+      <el-table-column label="审核状态" align="center" >
+        <template #default="scope">
+          <span v-if="scope.row.verifyStatus === '1'">审核通过</span>
+          <span v-else-if="scope.row.verifyStatus === '2'">审核不通过</span>
+          <span v-else-if="scope.row.verifyStatus === '0'">审核中</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
 <!--          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:verify:edit']">修改</el-button>-->
 <!--          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:verify:remove']">删除</el-button>-->
-          <el-button link type="primary" icon="Edit" @click="handleAllow(scope.row)" v-hasPermi="['verify:allow']">审核通过</el-button>
-          <el-button link type="primary" icon="Edit" @click="handleNotallow(scope.row)" v-hasPermi="['verify:notallow']">审核不通过</el-button>
+          <el-button plain type="success"  @click="handleAllow(scope.row)" v-hasPermi="['verify:allow']">审核通过</el-button>
+          <el-button plain type="danger"  @click="handleNotallow(scope.row)" v-hasPermi="['verify:notallow']">审核不通过</el-button>
         </template>
       </el-table-column>
     </el-table>

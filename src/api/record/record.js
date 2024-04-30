@@ -84,14 +84,39 @@ export function getMyReturnList(query) {
   })
 }
 
+// 归还设备按钮
+export function returnDevice(id) {
+  return request({
+    url: '/system/record/returnDevice',
+    method: 'put',
+    data: {
+      id: id
+    }
+  })
+}
 
 
 
 //----------------------------------------归还审核列表
+
+//查询归还审核列表
 export function listReturnRecord(query) {
   return request({
     url: '/system/record/listReturnRecord',
     method: 'get',
     params: query
+  })
+}
+
+
+//确认归还
+// 后端需要根据id将记录表将归还状态改为2已归还，并且设备剩余数量+1
+export function confirmReturn(id){
+  return request({
+    url: '/system/record/confirmReturn',
+    method: 'put',
+    data: {
+      id: id
+    }
   })
 }
