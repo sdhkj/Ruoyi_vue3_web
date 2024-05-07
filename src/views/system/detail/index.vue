@@ -74,8 +74,8 @@
       <el-table-column label="剩余数量"  align="center" prop="remainNum" width="240"/>
       <el-table-column label="操作"  class-name="small-padding fixed-width" >
         <template #default="scope">
-<!--          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['detail:detail:edit']">修改</el-button>-->
-<!--          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['detail:detail:remove']">删除</el-button>-->
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['detail:detail:edit']">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['detail:detail:remove']">删除</el-button>
           <el-button plain type="primary"  @click="handleBorrow(scope.row)" v-hasPermi="['common:device:borrow']">借用</el-button>
 
         </template>
@@ -97,8 +97,25 @@
           <el-input v-model="form.deviceName" placeholder="请输入设备名称" />
         </el-form-item>
         <el-form-item label="所属分类" prop="categoryId">
-          <el-input v-model="form.categoryId" placeholder="请输入分类名称" />
+<!--          <el-input v-model="form.categoryId" placeholder="请输入分类名称" />-->
+
+
+            <el-select v-model="form.categoryId" placeholder="请选择分类" size="medium" style="width: 240px">
+
+              <el-option
+                  v-for="item in options"
+                  :key="item.id"
+                  :label="item.categoryName"
+                  :value="item.id"
+              />
+            </el-select>
+
+
         </el-form-item>
+
+
+
+
         <el-form-item label="剩余数量" prop="remainNum">
           <el-input v-model="form.remainNum" placeholder="请输入剩余数量" />
         </el-form-item>
@@ -115,6 +132,7 @@
 
 <script setup name="Detail">
 import {listDetail, getDetail, delDetail, addDetail, updateDetail, addBorrowRecord} from "@/api/detail/detail";
+import { listAllDetail } from "@/api/category/category";
 import useUserStore from "@/store/modules/user.js";
 
 const { proxy } = getCurrentInstance();
@@ -128,6 +146,10 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
+
+//设备分类列表
+const value = ref('')
+const options = ref([])
 
 const data = reactive({
   form: {},
@@ -152,6 +174,12 @@ const data = reactive({
 });
 
 const { queryParams, form, rules } = toRefs(data);
+
+function getCatogoryList(){
+  listAllDetail().then(response => {
+    options.value = response.data;
+  });
+}
 
 /** 查询设备详细信息列表 */
 function getList() {
@@ -290,4 +318,5 @@ function handleExport() {
 }
 
 getList();
+getCatogoryList();
 </script>

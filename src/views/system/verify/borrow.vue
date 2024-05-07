@@ -68,8 +68,10 @@
     <el-table v-loading="loading" :data="recordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="序号" align="center" prop="id" />
-      <el-table-column label="用户id" align="center" prop="userId" />
-      <el-table-column label="借用设备id" align="center" prop="deviceId" />
+<!--      <el-table-column label="用户id" align="center" prop="userId" />-->
+      <el-table-column label="姓名" align="center" prop="nickName" />
+<!--      <el-table-column label="借用设备id" align="center" prop="deviceId" />-->
+      <el-table-column label="设备名称" align="center" prop="deviceName" />
       <el-table-column label="申请时间" align="center" prop="createTime" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
@@ -89,8 +91,8 @@
         <template #default="scope">
 <!--          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:verify:edit']">修改</el-button>-->
 <!--          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:verify:remove']">删除</el-button>-->
-          <el-button plain type="success"  @click="handleAllow(scope.row)" v-hasPermi="['verify:allow']">审核通过</el-button>
-          <el-button plain type="danger"  @click="handleNotallow(scope.row)" v-hasPermi="['verify:notallow']">审核不通过</el-button>
+          <el-button plain type="success"  @click="handleAllow(scope.row)" v-hasPermi="['verify:allow']" :disabled="!isButtonEnabled(scope.row.verifyStatus)">审核通过</el-button>
+          <el-button plain type="danger"  @click="handleNotallow(scope.row)" v-hasPermi="['verify:notallow']" :disabled="!isButtonEnabled(scope.row.verifyStatus)">审核不通过</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -156,6 +158,12 @@ const data = reactive({
 });
 
 const { queryParams, form, rules } = toRefs(data);
+
+// 判断归还按钮是否禁用
+function isButtonEnabled(status){
+  return status === '0';
+}
+
 
 /** 查询借用审核列表 */
 function getList() {

@@ -68,11 +68,19 @@
     <el-table v-loading="loading" :data="recordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="序号" align="center" prop="id" />
-      <el-table-column label="用户id" align="center" prop="userId" />
-      <el-table-column label="借用设备id" align="center" prop="deviceId" />
-      <el-table-column label="申请时间" align="center" prop="createTime" width="180">
+<!--      <el-table-column label="用户id" align="center" prop="userId" />-->
+      <el-table-column label="姓名" align="center" prop="nickName" />
+      <el-table-column label="电话" align="center" prop="phoneNumber" />
+<!--      <el-table-column label="借用设备id" align="center" prop="deviceId" />-->
+      <el-table-column label="设备名称" align="center" prop="deviceName" />
+<!--      <el-table-column label="申请时间" align="center" prop="createTime" width="180">-->
+<!--        <template #default="scope">-->
+<!--          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
+      <el-table-column label="归还时间" align="center" prop="returnTime" width="180">
         <template #default="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.returnTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <!--   规划状态 0未归还,1已归还  -->
@@ -86,7 +94,8 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button plain type="primary" @click="handleConfirmReturn(scope.row)" v-hasPermi="['confirm:return:status']">确认归还</el-button>
+          <el-button plain type="primary" @click="handleConfirmReturn(scope.row)" v-hasPermi="['confirm:return:status']"
+                     :disabled="!isButtonEnabled(scope.row.ruturnStatus)">确认归还</el-button>
 
 
         </template>
@@ -154,6 +163,12 @@ const data = reactive({
 });
 
 const { queryParams, form, rules } = toRefs(data);
+
+// 判断归还按钮是否禁用
+function isButtonEnabled(status){
+  return status === '1';
+}
+
 
 /** 查询借用审核列表 */
 function getList() {

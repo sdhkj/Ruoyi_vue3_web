@@ -69,12 +69,14 @@
 
     <el-table v-loading="loading" :data="recordList" @selection-change="handleSelectionChange">
       <!--      <el-table-column type="selection" width="55" align="center" />-->
-      <el-table-column label="序号" align="center" prop="id" />
-      <el-table-column label="用户id" align="center" prop="userId" />
-      <el-table-column label="借用设备id" align="center" prop="deviceId" />
-      <el-table-column label="申请时间" align="center" prop="createTime" width="180">
+<!--      <el-table-column label="序号" align="center" prop="id" />-->
+<!--      <el-table-column label="用户id" align="center" prop="userId" />-->
+      <el-table-column label="姓名" align="center" prop="nickName" />
+<!--      <el-table-column label="借用设备id" align="center" prop="deviceId" />-->
+      <el-table-column label="设备名称" align="center" prop="deviceName" />
+      <el-table-column label="归还时间" align="center" prop="returnTime" width="180">
         <template #default="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.returnTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <!--      0审核中，1通过，2未通过-->
@@ -90,7 +92,7 @@
               <template #default="scope">
                 <!--          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:verify:edit']">修改</el-button>-->
                 <!--          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:verify:remove']">删除</el-button>-->
-                <el-button plain type="primary" @click="handleReturnDevice(scope.row)" v-hasPermi="['common:return']">归还</el-button>
+                <el-button plain type="primary" @click="handleReturnDevice(scope.row)" v-hasPermi="['common:return']" :disabled="!isButtonEnabled(scope.row.ruturnStatus)">归还</el-button>
 
               </template>
             </el-table-column>
@@ -152,6 +154,10 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
+// 判断归还按钮是否禁用
+function isButtonEnabled(status){
+  return status === '0';
+}
 
 
 /** 分页查询借用设备列表 */

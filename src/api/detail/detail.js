@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+
+
+
 // 查询设备详细信息列表
 export function listDetail(query) {
   return request({

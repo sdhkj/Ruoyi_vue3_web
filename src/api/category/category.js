@@ -1,5 +1,14 @@
 import request from '@/utils/request'
 
+// 查询所有设备分类列表
+export function listAllDetail() {
+  return request({
+    url: '/category/category/listAll',
+    method: 'post',
+
+  })
+}
+
 // 查询分类管理列表
 export function listCategory(query) {
   return request({

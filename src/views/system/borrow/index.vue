@@ -69,9 +69,11 @@
 
     <el-table v-loading="loading" :data="recordList" @selection-change="handleSelectionChange">
 <!--      <el-table-column type="selection" width="55" align="center" />-->
-      <el-table-column label="序号" align="center" prop="id" />
-      <el-table-column label="用户id" align="center" prop="userId" />
-      <el-table-column label="借用设备id" align="center" prop="deviceId" />
+<!--      <el-table-column label="序号" align="center" prop="id" />-->
+<!--      <el-table-column label="用户id" align="center" prop="userId" />-->
+      <el-table-column label="姓名" align="center" prop="nickName" />
+<!--      <el-table-column label="借用设备id" align="center" prop="deviceId" />-->
+      <el-table-column label="设备名称" align="center" prop="deviceName" />
       <el-table-column label="申请时间" align="center" prop="createTime" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
