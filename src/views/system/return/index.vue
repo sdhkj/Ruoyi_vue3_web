@@ -286,10 +286,6 @@ function handleReturnDevice(row){
 
 
 
-
-
-
-
 }
 
 

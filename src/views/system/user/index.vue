@@ -47,6 +47,7 @@
                      @keyup.enter="handleQuery"
                   />
                </el-form-item>
+
                <el-form-item label="状态" prop="status">
                   <el-select
                      v-model="queryParams.status"
@@ -187,6 +188,12 @@
                      <el-input v-model="form.nickName" placeholder="请输入姓名" maxlength="30" />
                   </el-form-item>
                </el-col>
+
+              <el-col :span="12">
+                <el-form-item label="学号" prop="userName">
+                  <el-input v-model="form.userName" placeholder="请输入学号" maxlength="30" />
+                </el-form-item>
+              </el-col>
 
               <el-col :span="12">
                 <el-form-item label="角色">
